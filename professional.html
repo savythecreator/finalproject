@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savannah McEwan | Professional Portfolio</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #0ea5e9;
+            --primary-dark: #0369a1;
+            --accent-color: #fbbf24;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            color: var(--text-dark);
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .navbar {
+            background: linear-gradient(to right, rgba(14, 165, 233, 0.9), rgba(3, 105, 161, 0.9));
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 120px 0;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+
+        .resume-section {
+            background-color: #f8fafc;
+        }
+
+        .skill-badge {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin: 0.25rem;
+            display: inline-block;
+        }
+
+        .education-card, .experience-card {
+            border-left: 3px solid var(--primary-color);
+            padding-left: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-section {
+            background: linear-gradient(to right, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .card-img-top {
+            max-height: 400px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Savannah McEwan</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#resume">Résumé</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">Projects</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Travel Blog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="bunny-maze.html">🐰 Bunny Maze</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="about">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Welcome to My Portfolio</h1>
+            <p class="lead mb-4">Data Analyst | Web Developer | Adventure Enthusiast</p>
+            <a href="#resume" class="btn btn-warning btn-lg">View My Résumé</a>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume-section py-5">
+        <div class="container">
+            <h2 class="section-title">Résumé</h2>
+            
+            <!-- Education -->
+            <div class="mb-5">
+                <h3 class="mb-4">Education</h3>
+                <div class="education-card">
+                    <h4>Brigham Young University</h4>
+                    <p class="text-muted">August 2021 - 2024</p>
+                    <p>3.95 GPA</p>
+                </div>
+                <div class="education-card">
+                    <h4>Palomar College</h4>
+                    <p class="text-muted">August 2019 - May 2021</p>
+                    <p>4.0 GPA</p>
+                </div>
+                <div class="education-card">
+                    <h4>Poway High School</h4>
+                    <p class="text-muted">August 2017 - June 2021</p>
+                    <p>4.0 GPA</p>
+                </div>
+                <div class="education-card">
+                    <h4>Seminary, Church of Jesus Christ of Latter Day Saints</h4>
+                    <p class="text-muted">August 2017 - June 2021</p>
+                    <p>100% attendance freshman/sophomore year at 6 in the morning</p>
+                </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="mb-5">
+                <h3 class="mb-4">Professional Experience</h3>
+                <div class="experience-card">
+                    <h4>Get Air Corporate Office</h4>
+                    <p class="text-muted">Intern</p>
+                    <ul>
+                        <li>Assisted with bookkeeping, financial analysis, and reports</li>
+                        <li>Explored all departments</li>
+                    </ul>
+                </div>
+                <div class="experience-card">
+                    <h4>Trampoline Park</h4>
+                    <p class="text-muted">Staff Member</p>
+                    <ul>
+                        <li>Managing customer service</li>
+                        <li>Supervising safety and handling transactions</li>
+                        <li>Responsible for cleaning facility during Covid</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Leadership & Activities -->
+            <div class="mb-5">
+                <h3 class="mb-4">Leadership & Activities</h3>
+                <div class="experience-card">
+                    <h4>Church of Jesus Christ — Youth Camp Leader</h4>
+                    <p class="text-muted">June 2018 / June 2019 / June 2020</p>
+                    <ul>
+                        <li>Spent the year holding meetings to collaborate and plan the camps</li>
+                        <li>Led and mentored 13 girls, organizing team-building activities and service projects</li>
+                    </ul>
+                </div>
+                <div class="experience-card">
+                    <h4>Lunches for the Homeless — Organizer and Leader</h4>
+                    <p class="text-muted">March - July 2021</p>
+                    <ul>
+                        <li>Initiated and organized a weekly program, distributing 1,000+ meals to homeless individuals</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Volunteer Work -->
+            <div class="mb-5">
+                <h3 class="mb-4">Volunteer Work</h3>
+                <div class="experience-card">
+                    <h4>Mission Service</h4>
+                    <p>Lived in Argentina for a year and a half to serve and teach about the gospel of Jesus Christ</p>
+                </div>
+                <div class="experience-card">
+                    <h4>Community Service</h4>
+                    <ul>
+                        <li>Pet Sitting: Occasional pet sitting for out of town owners</li>
+                        <li>President: Volunteered as president in church youth group organization</li>
+                        <li>Humanitarian Work: Assisted in building schools for underprivileged children, improving access to education</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Honors -->
+            <div class="mb-5">
+                <h3 class="mb-4">Honors & Achievements</h3>
+                <div class="experience-card">
+                    <ul>
+                        <li>Branch and State Honors in Piano</li>
+                        <li>Certificate of Merit Piano Performance</li>
+                        <li>Varsity Track Athlete</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="mb-5">
+                <h3 class="mb-4">Skills</h3>
+                <div>
+                    <span class="skill-badge">Excel</span>
+                    <span class="skill-badge">Spanish (Fluent)</span>
+                    <span class="skill-badge">Leadership</span>
+                    <span class="skill-badge">Event Planning</span>
+                    <span class="skill-badge">Time Management</span>
+                    <span class="skill-badge">Team Collaboration</span>
+                    <span class="skill-badge">Active Listening</span>
+                    <span class="skill-badge">Adaptability</span>
+                    <span class="skill-badge">Financial Analysis</span>
+                    <span class="skill-badge">Customer Service</span>
+                </div>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="mb-5" id="contact">
+                <h3 class="mb-4">Contact Information</h3>
+                <div class="experience-card">
+                    <p><i class="fas fa-map-marker-alt me-2"></i>123 Main Street, Anytown, CA 90210</p>
+                    <p><i class="fas fa-phone me-2"></i>555-123-4567</p>
+                    <p><i class="fas fa-envelope me-2"></i>example@email.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-5">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <img src="https://images.pexels.com/photos/4588065/pexels-photo-4588065.jpeg" class="card-img-top" alt="Bunny in a garden">
+                        <div class="card-body">
+                            <h5 class="card-title">🐰 Bunny Maze Game</h5>
+                            <p class="card-text">An interactive maze game where players guide a bunny to collect carrots while avoiding traps. Built with JavaScript Canvas API and features real-time scoring, trap doors, and confetti celebrations.</p>
+                            <div class="d-flex gap-2">
+                                <a href="bunny-maze.html" class="btn btn-primary">Play Game</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <img src="https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg" class="card-img-top" alt="Thailand Temple">
+                        <div class="card-body">
+                            <h5 class="card-title">✈️ Travel Blog</h5>
+                            <p class="card-text">Personal travel blog showcasing adventures and experiences worldwide. Features interactive maps, photo galleries, and stories from my journeys across different continents.</p>
+                            <div class="d-flex gap-2">
+                                <a href="index.html" class="btn btn-primary">View Blog</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>© <span id="current-year"></span> Savannah McEwan. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html> 

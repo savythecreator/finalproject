@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Maze Game</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: sans-serif;
+            margin: 0;
+        }
+
+        #game-container {
+            position: relative;
+            border: 5px solid #333;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 15px;
+            text-align: center;
+        }
+
+        canvas {
+            display: block;
+            background-color: #a0d468;
+            border-radius: 5px;
+            margin: 0 auto;
+        }
+
+        #info-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        #timerDisplay, #bestTimeDisplay {
+            font-weight: bold;
+            min-width: 100px;
+            text-align: center;
+        }
+        #bestTimeDisplay span {
+            color: #e67e22;
+        }
+        #timerDisplay span {
+            color: #3498db;
+        }
+
+        #message {
+            margin-top: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            min-height: 25px;
+        }
+
+        #restartBtn {
+            display: none;
+            margin: 15px auto 0 auto;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            background-color: #5dbcd2;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        #restartBtn:hover {
+            background-color: #4aa8bd;
+        }
+
+        #crackedOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="0,0 50,50 100,0 50,50 0,100 50,50 100,100 50,50 50,0 50,100" style="fill:none;stroke:rgba(0,0,0,0.5);stroke-width:1"/></svg>');
+            background-size: cover;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            display: none;
+            z-index: 10;
+            border-radius: 10px;
+        }
+
+        /* Add a back button */
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background-color: #5dbcd2;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #4aa8bd;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-button">← Back to Blog</a>
+    <h1>Bunny Maze</h1>
+    <p>Use arrow keys to reach the carrot (🥕)! Avoid dead ends and watch out for traps (🌀)! Beat the clock!</p>
+
+    <div id="game-container">
+        <div id="info-display">
+            <div id="timerDisplay">Time: <span>0.0s</span></div>
+            <div id="bestTimeDisplay">Best: <span>--</span></div>
+        </div>
+        <canvas id="mazeCanvas"></canvas>
+        <div id="crackedOverlay"></div>
+        <div id="message"></div>
+        <button id="restartBtn">Restart</button>
+    </div>
+
+    <script>
+        // Game code remains exactly the same
+        const canvas = document.getElementById('mazeCanvas');
+        const ctx = canvas.getContext('2d');
+        const messageDisplay = document.getElementById('message');
+        const restartBtn = document.getElementById('restartBtn');
+        const crackedOverlay = document.getElementById('crackedOverlay');
+        const timerElement = document.getElementById('timerDisplay').querySelector('span');
+        const bestTimeElement = document.getElementById('bestTimeDisplay').querySelector('span');
+
+        const maze = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 0, 1, 4, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 4, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1],
+            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 3, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ];
+
+        const trapDoors = {
+            "1,4": { x: 8, y: 8 },
+            "3,5": { x: 1, y: 8 }
+        };
+
+        const cellSize = 40;
+        const mazeWidth = maze[0].length;
+        const mazeHeight = maze.length;
+
+        canvas.width = mazeWidth * cellSize;
+        canvas.height = mazeHeight * cellSize;
+
+        let player = { x: 0, y: 0, direction: 'right' };
+        let goal = { x: 0, y: 0 };
+        let gameOver = false;
+        let startTime = 0;
+        let timerInterval = null;
+        let elapsedTime = 0;
+        let timerStarted = false;
+        let bestTime = Infinity;
+
+        function loadBestTime() {
+            const storedTime = localStorage.getItem('bunnyMazeBestTime');
+            bestTime = storedTime ? parseFloat(storedTime) : Infinity;
+            displayBestTime();
+        }
+
+        function displayBestTime() {
+            bestTimeElement.textContent = bestTime === Infinity ? '--' : `${bestTime.toFixed(1)}s`;
+        }
+
+        function initializePositions() {
+            for (let y = 0; y < mazeHeight; y++) {
+                for (let x = 0; x < mazeWidth; x++) {
+                    if (maze[y][x] === 2) {
+                        player.x = x;
+                        player.y = y;
+                    } else if (maze[y][x] === 3) {
+                        goal.x = x;
+                        goal.y = y;
+                    }
+                }
+            }
+        }
+
+        function drawMaze() {
+            for (let y = 0; y < mazeHeight; y++) {
+                for (let x = 0; x < mazeWidth; x++) {
+                    const cellType = maze[y][x];
+                    const drawX = x * cellSize;
+                    const drawY = y * cellSize;
+
+                    ctx.beginPath();
+                    ctx.rect(drawX, drawY, cellSize, cellSize);
+
+                    if (cellType === 1) {
+                        ctx.fillStyle = '#5d4037';
+                    } else if (cellType === 4) {
+                        ctx.fillStyle = '#a0d468';
+                        ctx.fill();
+                        ctx.fillStyle = '#8e44ad';
+                        ctx.font = `${cellSize * 0.7}px sans-serif`;
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('🌀', drawX + cellSize / 2, drawY + cellSize / 2 + 2);
+                        ctx.closePath();
+                        continue;
+                    } else {
+                        ctx.fillStyle = '#a0d468';
+                    }
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            }
+        }
+
+        function drawCharacter(char, x, y, direction = 'right', color = '#000') {
+            const centerX = x * cellSize + cellSize / 2;
+            const centerY = y * cellSize + cellSize / 2;
+
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            let angle = 0;
+            switch (direction) {
+                case 'up':    angle = -Math.PI / 2; break;
+                case 'down':  angle = Math.PI / 2;  break;
+                case 'left':  angle = Math.PI;      break;
+                case 'right': angle = 0;            break;
+            }
+            ctx.rotate(angle);
+            ctx.fillStyle = color;
+            ctx.font = `${cellSize * 0.7}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(char, 0, 2);
+            ctx.restore();
+        }
+
+        function startTimer() {
+            if (!timerStarted) {
+                startTime = Date.now();
+                timerStarted = true;
+                timerInterval = setInterval(updateTimer, 100);
+            }
+        }
+
+        function updateTimer() {
+            if (!gameOver) {
+                elapsedTime = (Date.now() - startTime) / 1000;
+                timerElement.textContent = `${elapsedTime.toFixed(1)}s`;
+            }
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            if (timerStarted) {
+                elapsedTime = (Date.now() - startTime) / 1000;
+                timerElement.textContent = `${elapsedTime.toFixed(1)}s`;
+            }
+        }
+
+        function checkCollision(x, y) {
+            if (x < 0 || x >= mazeWidth || y < 0 || y >= mazeHeight) return true;
+            return maze[y][x] === 1;
+        }
+
+        function isDeadEnd(x, y, prevX, prevY) {
+            if (x < 0 || x >= mazeWidth || y < 0 || y >= mazeHeight ||
+                maze[y][x] === 1 || maze[y][x] === 2 || maze[y][x] === 3 || maze[y][x] === 4) {
+                return false;
+            }
+            let wallCount = 0;
+            const neighbors = [{ dx: 0, dy: -1 },{ dx: 0, dy: 1 },{ dx: -1, dy: 0 },{ dx: 1, dy: 0 }];
+            for (const neighbor of neighbors) {
+                const nextX = x + neighbor.dx;
+                const nextY = y + neighbor.dy;
+                if (nextX === prevX && nextY === prevY) continue;
+                if (nextX < 0 || nextX >= mazeWidth || nextY < 0 || nextY >= mazeHeight || maze[nextY][nextX] === 1) {
+                    wallCount++;
+                }
+            }
+            return wallCount >= 3;
+        }
+
+        function movePlayer(dx, dy) {
+            if (gameOver) return;
+
+            const nextX = player.x + dx;
+            const nextY = player.y + dy;
+            const prevX = player.x;
+            const prevY = player.y;
+
+            if (!checkCollision(nextX, nextY)) {
+                startTimer();
+
+                player.x = nextX;
+                player.y = nextY;
+
+                if (dx === 1) player.direction = 'right';
+                else if (dx === -1) player.direction = 'left';
+                else if (dy === 1) player.direction = 'down';
+                else if (dy === -1) player.direction = 'up';
+
+                let teleported = false;
+                const currentCellType = maze[player.y][player.x];
+
+                if (currentCellType === 4) {
+                    const trapKey = `${player.y},${player.x}`;
+                    if (trapDoors[trapKey]) {
+                        const destination = trapDoors[trapKey];
+                        player.x = destination.x;
+                        player.y = destination.y;
+                        teleported = true;
+                    }
+                }
+
+                redrawGame();
+
+                if (player.x === goal.x && player.y === goal.y) {
+                    winGame();
+                }
+                else if (!teleported && isDeadEnd(player.x, player.y, prevX, prevY)) {
+                    loseGame();
+                }
+            }
+        }
+
+        function winGame() {
+            gameOver = true;
+            stopTimer();
+
+            let winMessage = `You reached the carrot in ${elapsedTime.toFixed(1)}s!`;
+
+            if (elapsedTime < bestTime) {
+                bestTime = elapsedTime;
+                localStorage.setItem('bunnyMazeBestTime', bestTime.toString());
+                displayBestTime();
+                winMessage += ' New best time!';
+            } else if (bestTime !== Infinity) {
+                winMessage += ` (Best: ${bestTime.toFixed(1)}s)`;
+            }
+
+            messageDisplay.textContent = winMessage;
+            restartBtn.style.display = 'block';
+
+            const canvasRect = canvas.getBoundingClientRect();
+            const confettiX = (canvasRect.left + canvasRect.right) / 2;
+            const confettiY = (canvasRect.top + canvasRect.bottom) / 2;
+            confetti({
+                particleCount: 150, spread: 90,
+                origin: { x: confettiX / window.innerWidth, y: confettiY / window.innerHeight }
+            });
+            const duration = 3 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.4, 0.6), y: randomInRange(0.4, 0.6) } }));
+            }, 250);
+        }
+
+        function loseGame() {
+            gameOver = true;
+            stopTimer();
+            messageDisplay.textContent = 'Oh no, a dead end!';
+            crackedOverlay.style.display = 'block';
+            restartBtn.style.display = 'block';
+        }
+
+        function resetGame() {
+            gameOver = false;
+            stopTimer();
+            timerStarted = false;
+            elapsedTime = 0;
+            timerElement.textContent = '0.0s';
+
+            initializePositions();
+            player.direction = 'right';
+            messageDisplay.textContent = '';
+            crackedOverlay.style.display = 'none';
+            restartBtn.style.display = 'none';
+            displayBestTime();
+            redrawGame();
+        }
+
+        function redrawGame() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawMaze();
+            drawCharacter('🥕', goal.x, goal.y);
+            drawCharacter('🐇', player.x, player.y, player.direction);
+        }
+
+        window.addEventListener('keydown', (event) => {
+            if (gameOver && event.key !== 'Enter') return;
+
+            switch (event.key) {
+                case 'ArrowUp': movePlayer(0, -1); break;
+                case 'ArrowDown': movePlayer(0, 1); break;
+                case 'ArrowLeft': movePlayer(-1, 0); break;
+                case 'ArrowRight': movePlayer(1, 0); break;
+            }
+            if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+                event.preventDefault();
+            }
+        });
+
+        restartBtn.addEventListener('click', resetGame);
+
+        loadBestTime();
+        initializePositions();
+        redrawGame();
+        messageDisplay.textContent = 'Use arrow keys!';
+    </script>
+</body>
+</html> 
