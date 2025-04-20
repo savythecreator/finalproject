@@ -6,7 +6,7 @@ This project involves creating a professional website with multiple components, 
 ## Requirements and Progress Checklist
 
 ### General Requirements
-- [ ] Host the site on GitHub pages
+- [x] Host the site on GitHub pages
 - [x] Ensure no broken content (images, links, videos, etc.)
 - [x] Include HTML résumé (not PDF)
 - [x] Professional appearance
